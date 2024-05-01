@@ -1,0 +1,56 @@
+{% extends 'top navbar/top-navbar.html' %} {% block title %} add products {%
+endblock %} {%block content %}
+
+<div class="container-fluid mx-4">
+  <div class="d-flex justify-content-center align-items-center" style="height: calc(100vh - 56px);">
+    <!-- 56px es la altura aproximada del navbar, ajusta este valor según sea necesario -->
+    <div class="col-xl-12">
+      <div class="row">
+
+        <div class="col-xl-4 offset-xl-1">
+          <!-- Aquí se coloca la imagen -->
+          <!-- La clase w-100 estira la imagen al 100% del ancho de la columna -->
+              <div id="list-example" class="list-group">
+                <a class="list-group-item list-group-item-action" href="#list-item-1">Item 1</a>
+                <a class="list-group-item list-group-item-action" href="#list-item-2">Item 2</a>
+                <a class="list-group-item list-group-item-action" href="#list-item-3">Item 3</a>
+                <a class="list-group-item list-group-item-action" href="#list-item-4">Item 4</a>
+              </div>
+  
+
+          <div class="col-xl-10 offset-xl-1">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">First</th>
+                  <th scope="col">Last</th>
+                  <th scope="col">Handle</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Mark</td>
+                  <td>Otto</td>
+                  <td>@mdo</td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Jacob</td>
+                  <td>Thornton</td>
+                  <td>@fat</td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td colspan="2">Larry the Bird</td>
+                  <td>@twitter</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
