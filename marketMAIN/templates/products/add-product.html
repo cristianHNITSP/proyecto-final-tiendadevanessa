@@ -3,6 +3,11 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/products.css') }}">
 
+<script src="https://cdn.jsdelivr.net/npm/quagga/dist/quagga.min.js"></script>
+<style>
+
+</style>
+
 <div class="container-fluid mt-5 "> <!-- Agregamos la clase mt-5 para añadir margen superior -->
   <div class="row mx-2 mt-5 border border-Tertiary rounded p-0 ">
 
@@ -58,39 +63,103 @@
 
     <div class="modal fade" id="createmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createmodallabel"
       aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Nuevo Producto</h5>
-            <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h5 class="modal-title" id="exampleModalLabel">Create new product</h5>
+            <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal"
+              aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <!-- Anexar la aquí la función para recibir los datos mediante el método post -->
             <form action="" method="post" class="needs-validation" novalidate>
-              <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre:</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" required>
-                <div class="invalid-feedback">Por favor ingresa un nombre.</div>
-              </div>
-              <div class="mb-3">
-                <label for="cantidad" class="form-label">Cantidad:</label>
-                <input type="number" class="form-control" id="cantidad" name="cantidad" required>
-                <div class="invalid-feedback">Por favor ingresa una cantidad válida.</div>
-              </div>
-              <div class="mb-3">
-                <label for="precio" class="form-label">Precio:</label>
-                <div class="input-group">
-                  <span class="input-group-text">$</span>
-                  <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
-                  <div class="invalid-feedback">Por favor ingresa un precio válido.</div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre:</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    <div class="invalid-feedback">Por favor ingresa un nombre.</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="presentacion" class="form-label">Presentación:</label>
+                    <select class="form-select form-select-sm" id="presentacion" aria-label="Small select example"
+                      onchange="cambiarUnidadMedida()">
+                      <option value="lote" selected>Lote</option>
+                      <option value="botella">Botella</option>
+                      <option value="empaquetado">Empaquetado</option>
+                      <option value="granel">Granel</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="cantidad" class="form-label">Cantidad de productos:</label>
+                    <input type="number" class="form-control" id="cantidad" name="cantidad" required>
+                    <div class="invalid-feedback">Por favor ingresa una cantidad válida.</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="compania" class="form-label">Compañía:</label>
+                    <select class="form-select form-select-sm" id="compania" aria-label="Small select example">
+                      <option value="compania1" selected>Compañía 1</option>
+                      <option value="compania2">Compañía 2</option>
+                      <option value="compania3">Compañía 3</option>
+                    </select>
+                  </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="cantidad" class="form-label">Cantidad:</label>
+                    <output id="cantidadOutput" class="form-control">0</output>
+                    <input type="range" class="form-range" id="cantidadRange" min="0" max="100"
+                      onchange="actualizarCantidad()">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="precio" class="form-label">Precio:</label>
+                    <div class="input-group">
+                      <span class="input-group-text">$</span>
+                      <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
+                      <div class="invalid-feedback">Por favor ingresa un precio válido.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="mb-3">
+                <!-- Botón para abrir la cámara -->
+                <label for="cantidad" class="form-label">Codebars:</label>
+                <button type="button" class="btn btn-primary" onclick="startCamera()">Scancode </button>
+              </div>
+
+              <!-- Vista previa de la cámara -->
+              <div class="mb-3 mt-3 row justify-content-left">
+                <label for="camera" class="form-label col-12 col-md-6">preview:</label>
+                <div class="container-fluid mt-2">
+                  <div id="camera" class="preview-camera border border-Tertiary rounded p-0 col-12 col-md-6"></div>
+                </div>
+
+              </div>
+
+              <!-- Selector para los códigos de barras escaneados -->
+              <div class="mb-3">
+                <label for="qrCodes" class="form-label">Codebar scanned:</label>
+                <select class="form-select form-select-sm" id="qrCodes" aria-label="Small select example">
+                  <!-- Aquí se agregarán dinámicamente los códigos de barras escaneados -->
+                </select>
+              </div>
+
               <div class="text-end">
-                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Guardar Producto</button>
+                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal"
+                  onclick="limpiarModal()">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Save products</button>
               </div>
             </form>
           </div>
+
+
         </div>
       </div>
     </div>
@@ -100,20 +169,232 @@
 </div>
 
 <script>
-    // Bloquear números negativos en el campo de precio
-    document.getElementById('precio').addEventListener('input', function() {
-        if (this.value < 0) {
-            this.value = '';
-        }
-    });
+  // Bloquear números negativos en el campo de precio
+  document.getElementById('precio').addEventListener('input', function () {
+    if (this.value < 0) {
+      this.value = '';
+    }
+  });
 
-        // Bloquear números negativos en el campo de cantidad
-        document.getElementById('cantidad').addEventListener('input', function() {
-        if (this.value < 0) {
-            this.value = '';
-        }
-    });
-    
+  // Bloquear números negativos en el campo de cantidad
+  document.getElementById('cantidad').addEventListener('input', function () {
+    if (this.value < 0) {
+      this.value = '';
+    }
+  });
 </script>
+
+<script>
+  function actualizarCantidad() {
+    var presentacion = document.getElementById("presentacion").value;
+    var cantidadRange = document.getElementById("cantidadRange");
+    var cantidadOutput = document.getElementById("cantidadOutput");
+
+    switch (presentacion) {
+      case "lote":
+        // No se especifica una unidad de medida, se utiliza el valor predeterminado del rango
+        cantidadOutput.value = cantidadRange.value;
+        break;
+      case "botella":
+        // Ejemplo: cantidad en litros
+        cantidadOutput.value = cantidadRange.value + " litros";
+        break;
+      case "empaquetado":
+        // Ejemplo: cantidad en paquetes
+        cantidadOutput.value = cantidadRange.value + " paquetes";
+        break;
+      case "granel":
+        // Ejemplo: cantidad en kilogramos
+        cantidadOutput.value = cantidadRange.value + " kg";
+        break;
+      default:
+        // Se debe definir un valor predeterminado
+        cantidadOutput.value = cantidadRange.value;
+        break;
+    }
+  }
+</script>
+
+
+<script>
+  function playBeep() {
+    // Verificar si el navegador soporta AudioContext
+    if (window.AudioContext || window.webkitAudioContext) {
+      // Crear un nuevo contexto de audio
+      var context = new (window.AudioContext || window.webkitAudioContext)();
+
+      // Crear un oscilador para generar el tono
+      var oscillator = context.createOscillator();
+
+      // Configurar el oscilador para que genere un tono de 1000 Hz
+      oscillator.frequency.setValueAtTime(1000, context.currentTime);
+
+      // Conectar el oscilador al destino de audio (altavoces)
+      oscillator.connect(context.destination);
+
+      // Iniciar el oscilador
+      oscillator.start();
+
+      // Detener el oscilador después de 0.5 segundos (500 milisegundos)
+      setTimeout(function () {
+        oscillator.stop();
+      }, 500);
+    } else {
+      // Si el navegador no soporta AudioContext, mostrar un mensaje de error
+      console.error('El navegador no soporta la reproducción de sonidos.');
+    }
+  }
+
+  function startCamera() {
+  // Inicializar QuaggaJS con la configuración necesaria
+  Quagga.init({
+    inputStream: {
+      name: "Live",
+      type: "LiveStream",
+      target: document.querySelector("#camera"),
+      constraints: {
+        width: '100%', // Ancho al 100% del contenedor
+        height: 'auto', // Alto automático para mantener la relación de aspecto
+        marginTop: '5%', // Margen superior del 5% del contenedor
+        marginRight: 0, // Sin margen a la derecha
+        marginBottom: 0, // Sin margen en la parte inferior
+        marginLeft: 0, // Sin margen a la izquierda
+        padding: '10px', // Padding de 10px en todos los lados
+        // O puedes usar propiedades específicas de padding:
+        // paddingTop: '10px',
+        // paddingRight: '10px',
+        // paddingBottom: '10px',
+        // paddingLeft: '10px',
+      },
+      area: {
+        top: "0%",
+        right: "0%",
+        left: "0%",
+        bottom: "0%"
+      },
+      singleChannel: false
+    },
+    decoder: {
+      readers: ["ean_reader", "ean_8_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader", "i2of5_reader"]
+    }
+  }, function (err) {
+    if (err) {
+      console.error('Error al iniciar QuaggaJS:', err);
+      alert('Error al iniciar QuaggaJS. Por favor, asegúrate de permitir el acceso a la cámara.');
+      return;
+    }
+    console.log('QuaggaJS iniciado correctamente.');
+    Quagga.start();
+  });
+
+  // Evento para capturar los códigos de barras escaneados
+  Quagga.onDetected(function (result) {
+    var code = result.codeResult.code; // Obtener el código de barras detectado
+    console.log('Código de barras detectado:', code);
+    // Agregar el código de barras al selector
+    var select = document.getElementById("qrCodes");
+    var option = document.createElement("option");
+    option.text = code;
+    select.add(option);
+
+    // Reproducir sonido
+    playBeep();
+
+  
+  });
+
+  // Evento para marcar un recuadro al detectar un código de barras
+  Quagga.onProcessed(function (result) {
+    var drawingCtx = Quagga.canvas.ctx.overlay,
+      drawingCanvas = Quagga.canvas.dom.overlay;
+
+    // Limpiar el área de dibujo
+    drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+
+    // Verificar si hay resultados de códigos de barras y dibujar un recuadro si es así
+    if (result && result.boxes && result.boxes.length > 0) {
+      var area = result.boxes[0]; // Tomar el primer resultado de código de barras
+
+      drawingCtx.strokeStyle = "#00f"; // Color azul
+      drawingCtx.lineWidth = 2;
+      drawingCtx.strokeRect(area.left, area.top, area.width, area.height);
+
+      if (area) {
+        drawingCtx.strokeStyle = "#00f"; // Color azul
+        drawingCtx.lineWidth = 2;
+        drawingCtx.beginPath();
+        drawingCtx.moveTo(area[0][0], area[0][1]);
+        for (var i = 1; i < area.length; i++) {
+          drawingCtx.lineTo(area[i][0], area[i][1]);
+        }
+        drawingCtx.closePath();
+        drawingCtx.stroke();
+      }
+    }
+  });
+}
+
+</script>
+
+<script>
+  function limpiarModal() {
+    // Limpiar el campo de nombre
+    document.getElementById("nombre").value = "";
+
+    // Limpiar el campo de presentación
+    document.getElementById("presentacion").selectedIndex = 0;
+
+    // Limpiar el campo de cantidad
+    document.getElementById("cantidad").value = "";
+
+    // Limpiar el campo de compañía
+    document.getElementById("compania").selectedIndex = 0;
+
+    // Limpiar el campo de cantidad (rango)
+    document.getElementById("cantidadRange").value = 0;
+    actualizarCantidad();
+
+    // Limpiar el campo de precio
+    document.getElementById("precio").value = "";
+
+    // Limpiar los códigos de barras escaneados
+    var select = document.getElementById("qrCodes");
+    select.innerHTML = "";
+
+    // Detener la captura de QuaggaJS (si está activa)
+    Quagga.stop();
+  }
+
+  // Función para actualizar la cantidad mostrada según el rango seleccionado
+  function actualizarCantidad() {
+    var presentacion = document.getElementById("presentacion").value;
+    var cantidadRange = document.getElementById("cantidadRange");
+    var cantidadOutput = document.getElementById("cantidadOutput");
+
+    switch (presentacion) {
+      case "lote":
+        // No se especifica una unidad de medida, se utiliza el valor predeterminado del rango
+        cantidadOutput.value = cantidadRange.value;
+        break;
+      case "botella":
+        // Ejemplo: cantidad en litros
+        cantidadOutput.value = cantidadRange.value + " litros";
+        break;
+      case "empaquetado":
+        // Ejemplo: cantidad en paquetes
+        cantidadOutput.value = cantidadRange.value + " paquetes";
+        break;
+      case "granel":
+        // Ejemplo: cantidad en kilogramos
+        cantidadOutput.value = cantidadRange.value + " kg";
+        break;
+      default:
+        // Se debe definir un valor predeterminado
+        cantidadOutput.value = cantidadRange.value;
+        break;
+    }
+  }
+</script>
+
 
 {% endblock %}

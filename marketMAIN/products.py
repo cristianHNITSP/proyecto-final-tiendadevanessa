@@ -13,3 +13,4 @@ def editproduct():
 @bp.route('/addproduct')
 def addproduct():
     return render_template('products/add-product.html')
+

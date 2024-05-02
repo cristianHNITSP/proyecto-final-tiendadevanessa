@@ -62,3 +62,10 @@ body.dark-mode .list-group-buttons:active {
 
 }
 
+
+#camera {
+  width: 100%;
+  height: auto;
+  max-width: 765px; /* Máximo ancho para la cámara */
+  margin: 0 auto; /* Centrar la cámara */
+}
