@@ -1,7 +1,7 @@
 {% extends 'top navbar/top-navbar.html' %}
 {% block title %} View products {% endblock %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/auth.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/products.css') }}">
 
 <div class="container-fluid mt-5 "> <!-- Agregamos la clase mt-5 para añadir margen superior -->
   <div class="row mx-2 mt-5 border border-Tertiary rounded p-0 ">
@@ -12,7 +12,7 @@
     <div class="col-3 border border-Tertiary rounded p-0">
       <nav class="nav flex-column" style="height: 100vh;">
         <div class="list-group d-flex flex-column" style="height: 100%;">
-          <a class="list-group-button-home list-group-item list-group-item-action" href="{{ url_for('products.shortcut') }}">Home</a>
+          <a class="list-group-button-home list-group-item list-group-item-action" href="{{ url_for('shortcut.shortcut') }}">Home</a>
           <a class="list-group-item list-group-item-action active" href="{{ url_for('products.viewproduct') }}">View products</a>
           <a class="list-group-buttons list-group-item list-group-item-action" href="{{ url_for('products.addproduct') }}">Add product</a>
           <a class="list-group-buttons list-group-item list-group-item-action" href="{{ url_for('products.editproduct') }}">Edit Products</a>
@@ -33,29 +33,21 @@
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">cantidad</th>
+            <th scope="col">Precio</th>
           </tr>
         </thead>
         <tbody class="table-group-divider">
+          <!-- Enviar mediante un array llamada task los valores (el nombre lo vamos a cambiar a futuro) -->
+          {% for task in tasks %}
           <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
+            <th scope="row">{{ task[0] }}</th>
+            <td>{{ task[1] }}</td>
+            <td>{{ task[2] }}</td>
+            <td>{{ task[3] }}</td>
           </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>

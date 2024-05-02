@@ -1,10 +1,6 @@
 from flask import Flask, Blueprint, render_template, request, redirect, url_for
 
 bp = Blueprint('products', __name__, url_prefix='/products')
- 
-@bp.route('/shortcut')
-def shortcut():
-    return render_template('products/shortcut.html')
 
 @bp.route('/viewproduct')
 def viewproduct():

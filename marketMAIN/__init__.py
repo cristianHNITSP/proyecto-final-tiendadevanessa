@@ -20,6 +20,9 @@ def create_app():
     from . import profile
     app.register_blueprint(profile.bp)
 
+    from . import shorcut
+    app.register_blueprint(shorcut.bp)
+
     @app.route('/static/<path:path>')
     def send_static(path):
         return send_from_directory('static', path)

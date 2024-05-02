@@ -1,7 +1,7 @@
 {% extends 'top navbar/top-navbar.html' %}
 {% block title %} Add product {% endblock %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/auth.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/products.css') }}">
 
 <div class="container-fluid mt-5 "> <!-- Agregamos la clase mt-5 para añadir margen superior -->
   <div class="row mx-2 mt-5 border border-Tertiary rounded p-0 ">
@@ -12,10 +12,14 @@
     <div class="col-3 border border-Tertiary rounded p-0">
       <nav class="nav flex-column" style="height: 100vh;">
         <div class="list-group d-flex flex-column" style="height: 100%;">
-          <a class="list-group-button-home list-group-item list-group-item-action" href="{{ url_for('products.shortcut') }}">Home</a>
-          <a class="list-group-buttons list-group-item list-group-item-action" href="{{ url_for('products.viewproduct') }}">View products</a>
-          <a class="list-group-item list-group-item-action active" href="{{ url_for('products.addproduct') }}">Add product</a>
-          <a class="list-group-buttons list-group-item list-group-item-action" href="{{ url_for('products.editproduct') }}">Edit Products</a>
+          <a class="list-group-button-home list-group-item list-group-item-action"
+            href="{{ url_for('shortcut.shortcut') }}">Home</a>
+          <a class="list-group-buttons list-group-item list-group-item-action"
+            href="{{ url_for('products.viewproduct') }}">View products</a>
+          <a class="list-group-item list-group-item-action active" href="{{ url_for('products.addproduct') }}">Add
+            product</a>
+          <a class="list-group-buttons list-group-item list-group-item-action"
+            href="{{ url_for('products.editproduct') }}">Edit Products</a>
         </div>
       </nav>
     </div>
@@ -23,38 +27,72 @@
     <div class="col-9 "> <!-- Añadimos la clase rounded -->
       <form class="d-flex">
         <div class="flex-grow-1"></div> <!-- Este div se expandirá para ocupar el espacio disponible -->
-        <button class="btn btn-primary" type="submit">Create</button>
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createmodal"
+          data-bs-whatever="@mdo">Create</button>
+
       </form>
 
       <table class="table table-bordered table-striped mt-3 m-0"> <!-- Mantenemos las clases existentes -->
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">cantidad</th>
+            <th scope="col">Precio</th>
           </tr>
         </thead>
         <tbody class="table-group-divider">
+          <!-- Enviar mediante un array llamada task los valores (el nombre lo vamos a cambiar a futuro) -->
+          {% for task in tasks %}
           <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
+            <th scope="row">{{ task[0] }}</th>
+            <td>{{ task[1] }}</td>
+            <td>{{ task[2] }}</td>
+            <td>{{ task[3] }}</td>
           </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
+    </div>
+
+    <div class="modal fade" id="createmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createmodallabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Nuevo Producto</h5>
+            <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Anexar la aquí la función para recibir los datos mediante el método post -->
+            <form action="" method="post" class="needs-validation" novalidate>
+              <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre:</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                <div class="invalid-feedback">Por favor ingresa un nombre.</div>
+              </div>
+              <div class="mb-3">
+                <label for="cantidad" class="form-label">Cantidad:</label>
+                <input type="number" class="form-control" id="cantidad" name="cantidad" required>
+                <div class="invalid-feedback">Por favor ingresa una cantidad válida.</div>
+              </div>
+              <div class="mb-3">
+                <label for="precio" class="form-label">Precio:</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
+                  <div class="invalid-feedback">Por favor ingresa un precio válido.</div>
+                </div>
+              </div>
+              <div class="text-end">
+                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar Producto</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
 
 
@@ -62,7 +100,20 @@
 </div>
 
 <script>
+    // Bloquear números negativos en el campo de precio
+    document.getElementById('precio').addEventListener('input', function() {
+        if (this.value < 0) {
+            this.value = '';
+        }
+    });
 
+        // Bloquear números negativos en el campo de cantidad
+        document.getElementById('cantidad').addEventListener('input', function() {
+        if (this.value < 0) {
+            this.value = '';
+        }
+    });
+    
 </script>
 
 {% endblock %}
