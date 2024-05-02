@@ -246,93 +246,139 @@
   }
 
   function startCamera() {
-  // Inicializar QuaggaJS con la configuración necesaria
-  Quagga.init({
-    inputStream: {
-      name: "Live",
-      type: "LiveStream",
-      target: document.querySelector("#camera"),
-      constraints: {
-        width: '100%', // Ancho al 100% del contenedor
-        height: 'auto', // Alto automático para mantener la relación de aspecto
-        marginTop: '5%', // Margen superior del 5% del contenedor
-        marginRight: 0, // Sin margen a la derecha
-        marginBottom: 0, // Sin margen en la parte inferior
-        marginLeft: 0, // Sin margen a la izquierda
-        padding: '10px', // Padding de 10px en todos los lados
-        // O puedes usar propiedades específicas de padding:
-        // paddingTop: '10px',
-        // paddingRight: '10px',
-        // paddingBottom: '10px',
-        // paddingLeft: '10px',
+    // Inicializar QuaggaJS con la configuración necesaria
+    Quagga.init({
+      inputStream: {
+        name: "Live",
+        type: "LiveStream",
+        target: document.querySelector("#camera"),
+        constraints: {
+          width: '100%', // Ancho al 100% del contenedor
+          height: 'auto', // Alto automático para mantener la relación de aspecto
+          marginTop: '5%', // Margen superior del 5% del contenedor
+          marginRight: 0, // Sin margen a la derecha
+          marginBottom: 0, // Sin margen en la parte inferior
+          marginLeft: 0, // Sin margen a la izquierda
+          padding: '10px', // Padding de 10px en todos los lados
+          // O puedes usar propiedades específicas de padding:
+          // paddingTop: '10px',
+          // paddingRight: '10px',
+          // paddingBottom: '10px',
+          // paddingLeft: '10px',
+        },
+        area: {
+          top: "0%",
+          right: "0%",
+          left: "0%",
+          bottom: "0%"
+        },
+        singleChannel: false
       },
-      area: {
-        top: "0%",
-        right: "0%",
-        left: "0%",
-        bottom: "0%"
-      },
-      singleChannel: false
-    },
-    decoder: {
-      readers: ["ean_reader", "ean_8_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader", "i2of5_reader"]
+      decoder: {
+        readers: ["ean_reader", "ean_8_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader", "i2of5_reader"]
+      }
+    }, function (err) {
+      if (err) {
+        console.error('Error al iniciar QuaggaJS:', err);
+        alert('Error al iniciar QuaggaJS. Por favor, asegúrate de permitir el acceso a la cámara.');
+        return;
+      }
+      console.log('QuaggaJS iniciado correctamente.');
+      Quagga.start();
+    });
+
+    // Evento para capturar los códigos de barras escaneados
+    // Objeto para almacenar los códigos de barras escaneados y sus ocurrencias
+    var scannedCodes = {};
+
+    // Función para agregar un código a la lista y limpiar el registro
+    function addMostCommonCodeToList() {
+      // Encontrar el código de barras más común
+      var mostCommonCodes = Object.keys(scannedCodes).reduce(function (a, b) {
+        return scannedCodes[a] > scannedCodes[b] ? a : b;
+      });
+
+      console.log('Código de barras más común:', mostCommonCodes);
+
+      // Verificar si el código más común ya está en la lista
+      var select = document.getElementById("qrCodes");
+      var optionExists = Array.from(select.options).some(function (option) {
+        return option.value === mostCommonCodes;
+      });
+
+      // Si el código no está en la lista, agregarlo
+      if (!optionExists) {
+        // Crear un nuevo elemento de opción para el código más común
+        var option = document.createElement("option");
+        option.text = mostCommonCodes;
+
+        // Agregar el nuevo elemento de opción a la lista
+        select.add(option);
+
+        // Reproducir sonido
+        playBeep();
+      }
+
+      // Limpiar el registro de códigos escaneados
+      scannedCodes = {};
     }
-  }, function (err) {
-    if (err) {
-      console.error('Error al iniciar QuaggaJS:', err);
-      alert('Error al iniciar QuaggaJS. Por favor, asegúrate de permitir el acceso a la cámara.');
-      return;
-    }
-    console.log('QuaggaJS iniciado correctamente.');
-    Quagga.start();
-  });
 
-  // Evento para capturar los códigos de barras escaneados
-  Quagga.onDetected(function (result) {
-    var code = result.codeResult.code; // Obtener el código de barras detectado
-    console.log('Código de barras detectado:', code);
-    // Agregar el código de barras al selector
-    var select = document.getElementById("qrCodes");
-    var option = document.createElement("option");
-    option.text = code;
-    select.add(option);
+    // Evento para capturar los códigos de barras escaneados
+    Quagga.onDetected(function (result) {
+      var code = result.codeResult.code; // Obtener el código de barras detectado
+      console.log('Código de barras detectado:', code);
 
-    // Reproducir sonido
-    playBeep();
+      if (code.length === 13) {
+        console.log('Código de barras detectado:', code);
 
-  
-  });
+        // Incrementar el conteo para este código de barras
+        scannedCodes[code] = (scannedCodes[code] || 0) + 1;
 
-  // Evento para marcar un recuadro al detectar un código de barras
-  Quagga.onProcessed(function (result) {
-    var drawingCtx = Quagga.canvas.ctx.overlay,
-      drawingCanvas = Quagga.canvas.dom.overlay;
+        // Detener temporalmente la detección de códigos de barras
+        Quagga.pause();
 
-    // Limpiar el área de dibujo
-    drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+        // Esperar 2 segundos antes de procesar los códigos
+        setTimeout(function () {
+          addMostCommonCodeToList();
 
-    // Verificar si hay resultados de códigos de barras y dibujar un recuadro si es así
-    if (result && result.boxes && result.boxes.length > 0) {
-      var area = result.boxes[0]; // Tomar el primer resultado de código de barras
+          // Reiniciar la detección de códigos de barras
+          Quagga.start();
+        }, 2000); // Esperar 2 segundos antes de procesar los códigos
+      }
+    });
 
-      drawingCtx.strokeStyle = "#00f"; // Color azul
-      drawingCtx.lineWidth = 2;
-      drawingCtx.strokeRect(area.left, area.top, area.width, area.height);
 
-      if (area) {
+
+    // Evento para marcar un recuadro al detectar un código de barras
+    Quagga.onProcessed(function (result) {
+      var drawingCtx = Quagga.canvas.ctx.overlay,
+        drawingCanvas = Quagga.canvas.dom.overlay;
+
+      // Limpiar el área de dibujo
+      drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+
+      // Verificar si hay resultados de códigos de barras y dibujar un recuadro si es así
+      if (result && result.boxes && result.boxes.length > 0) {
+        var area = result.boxes[0]; // Tomar el primer resultado de código de barras
+
         drawingCtx.strokeStyle = "#00f"; // Color azul
         drawingCtx.lineWidth = 2;
-        drawingCtx.beginPath();
-        drawingCtx.moveTo(area[0][0], area[0][1]);
-        for (var i = 1; i < area.length; i++) {
-          drawingCtx.lineTo(area[i][0], area[i][1]);
+        drawingCtx.strokeRect(area.left, area.top, area.width, area.height);
+
+        if (area) {
+          drawingCtx.strokeStyle = "#00f"; // Color azul
+          drawingCtx.lineWidth = 2;
+          drawingCtx.beginPath();
+          drawingCtx.moveTo(area[0][0], area[0][1]);
+          for (var i = 1; i < area.length; i++) {
+            drawingCtx.lineTo(area[i][0], area[i][1]);
+          }
+          drawingCtx.closePath();
+          drawingCtx.stroke();
         }
-        drawingCtx.closePath();
-        drawingCtx.stroke();
       }
-    }
-  });
-}
+    });
+  }
 
 </script>
 
