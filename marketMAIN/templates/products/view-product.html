@@ -8,20 +8,23 @@
 
     <h6 class="mt-1 d-none d-sm-flex">View products</h6>
 
-
-    <div class="col-3 border border-Tertiary rounded p-0">
-      <nav class="nav flex-column" style="height: 100vh;">
-        <div class="list-group d-flex flex-column" style="height: 100%;">
-          <a class="list-group-button-home list-group-item list-group-item-action" href="{{ url_for('shortcut.shortcut') }}">Home</a>
-          <a class="list-group-item list-group-item-action active" href="{{ url_for('products.viewproduct') }}">View products</a>
-          <a class="list-group-buttons list-group-item list-group-item-action" href="{{ url_for('products.addproduct') }}">Add product</a>
-          <a class="list-group-buttons list-group-item list-group-item-action" href="{{ url_for('products.editproduct') }}">Edit Products</a>
+    <div class="col-12 col-lg-3 border border-Tertiary rounded p-0">
+      <nav class="nav flex-column">
+        <div class="list-group d-flex flex-column">
+          <a class="list-group-button-home list-group-item list-group-item-action"
+            href="{{ url_for('shortcut.shortcut') }}">Home</a>
+          <a class="list-group-item list-group-item-action active" href="{{ url_for('products.viewproduct') }}">View
+            products</a>
+          <a class="list-group-buttons list-group-item list-group-item-action"
+            href="{{ url_for('products.addproduct') }}">Add product</a>
+          <a class="list-group-buttons list-group-item list-group-item-action"
+            href="{{ url_for('products.editproduct') }}">Edit Products</a>
         </div>
       </nav>
     </div>
 
-    <div class="col-9 "> <!-- Añadimos la clase rounded -->
-      <form class="d-flex">
+    <div class="col-12 col-lg-9 mt-3"> <!-- Utilizamos clases de Bootstrap para diseño responsivo y espaciado -->
+      <form class="d-flex mt-3">
         <div class="col-sm-4">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         </div>
@@ -29,9 +32,9 @@
         <button class="btn btn-primary" type="submit">Search</button>
       </form>
 
-      <table class="table table-bordered table-striped mt-3 m-0"> <!-- Mantenemos las clases existentes -->
+      <table class="table table-bordered table-striped mt-3 mb-3"> <!-- Mantenemos las clases existentes y agregamos espaciado -->
         <thead>
-          <tr>
+            <tr>
             <th scope="col">#</th>
             <th scope="col">Nombre</th>
             <th scope="col">cantidad</th>

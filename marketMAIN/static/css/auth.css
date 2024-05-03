@@ -11,3 +11,7 @@ body.dark-mode .list-group-buttons:active {
     /* Color de fondo cuando se presiona el botón en modo claro */
 
 }
+
+::-webkit-scrollbar {
+    display: none;
+}

@@ -14,9 +14,9 @@
     <h6 class="mt-1 d-none d-sm-flex">Add product</h6>
 
 
-    <div class="col-3 border border-Tertiary rounded p-0">
-      <nav class="nav flex-column" style="height: 100vh;">
-        <div class="list-group d-flex flex-column" style="height: 100%;">
+    <div class="col-12 col-lg-3 border border-Tertiary rounded p-0">
+      <nav class="nav flex-column">
+        <div class="list-group d-flex flex-column">
           <a class="list-group-button-home list-group-item list-group-item-action"
             href="{{ url_for('shortcut.shortcut') }}">Home</a>
           <a class="list-group-buttons list-group-item list-group-item-action"
@@ -29,16 +29,17 @@
       </nav>
     </div>
 
-    <div class="col-9 "> <!-- Añadimos la clase rounded -->
-      <form class="d-flex">
+    <div class="col-12 col-lg-9 mt-3"> <!-- Utilizamos clases de Bootstrap para diseño responsivo y espaciado -->
+      <form class="d-flex mt-3">
         <div class="flex-grow-1"></div> <!-- Este div se expandirá para ocupar el espacio disponible -->
 
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createmodal"
-          data-bs-whatever="@mdo">Create</button>
-
+          data-bs-whatever="@mdo">Create
+        </button>
       </form>
 
-      <table class="table table-bordered table-striped mt-3 m-0"> <!-- Mantenemos las clases existentes -->
+      <table class="table table-bordered table-striped mt-3 mb-3">
+        <!-- Mantenemos las clases existentes y agregamos espaciado -->
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -60,6 +61,7 @@
         </tbody>
       </table>
     </div>
+
 
     <div class="modal fade" id="createmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createmodallabel"
       aria-hidden="true">
@@ -130,22 +132,18 @@
 
               <div class="mb-3">
                 <!-- Botón para abrir la cámara -->
-                <label for="cantidad" class="form-label">Codebars:</label>
-                <button type="button" class="btn btn-primary" onclick="startCamera()">Scancode </button>
+                <label for="cantidad" class="form-label">Codebars scan preview:</label>
               </div>
 
               <!-- Vista previa de la cámara -->
-              <div class="mb-3 mt-3 row justify-content-left">
-                <label for="camera" class="form-label col-12 col-md-6">preview:</label>
-                <div class="container-fluid mt-2">
-                  <div id="camera" class="preview-camera border border-Tertiary rounded p-0 col-12 col-md-6"></div>
-                </div>
+              <div class="container-fluid mt-3 bg-light rounded py-3">
 
+                <div class="preview-camera col-12 d-none" id="camera"></div>
               </div>
 
               <!-- Selector para los códigos de barras escaneados -->
               <div class="mb-3">
-                <label for="qrCodes" class="form-label">Codebar scanned:</label>
+                <label for="qrCodes" class="form-label mt-3">Codebar scanned:</label>
                 <select class="form-select form-select-sm" id="qrCodes" aria-label="Small select example">
                   <!-- Aquí se agregarán dinámicamente los códigos de barras escaneados -->
                 </select>
@@ -163,7 +161,6 @@
         </div>
       </div>
     </div>
-
 
   </div>
 </div>
@@ -213,173 +210,6 @@
         break;
     }
   }
-</script>
-
-
-<script>
-  function playBeep() {
-    // Verificar si el navegador soporta AudioContext
-    if (window.AudioContext || window.webkitAudioContext) {
-      // Crear un nuevo contexto de audio
-      var context = new (window.AudioContext || window.webkitAudioContext)();
-
-      // Crear un oscilador para generar el tono
-      var oscillator = context.createOscillator();
-
-      // Configurar el oscilador para que genere un tono de 1000 Hz
-      oscillator.frequency.setValueAtTime(1000, context.currentTime);
-
-      // Conectar el oscilador al destino de audio (altavoces)
-      oscillator.connect(context.destination);
-
-      // Iniciar el oscilador
-      oscillator.start();
-
-      // Detener el oscilador después de 0.5 segundos (500 milisegundos)
-      setTimeout(function () {
-        oscillator.stop();
-      }, 500);
-    } else {
-      // Si el navegador no soporta AudioContext, mostrar un mensaje de error
-      console.error('El navegador no soporta la reproducción de sonidos.');
-    }
-  }
-
-  function startCamera() {
-    // Inicializar QuaggaJS con la configuración necesaria
-    Quagga.init({
-      inputStream: {
-        name: "Live",
-        type: "LiveStream",
-        target: document.querySelector("#camera"),
-        constraints: {
-          width: '100%', // Ancho al 100% del contenedor
-          height: 'auto', // Alto automático para mantener la relación de aspecto
-          marginTop: '5%', // Margen superior del 5% del contenedor
-          marginRight: 0, // Sin margen a la derecha
-          marginBottom: 0, // Sin margen en la parte inferior
-          marginLeft: 0, // Sin margen a la izquierda
-          padding: '10px', // Padding de 10px en todos los lados
-          // O puedes usar propiedades específicas de padding:
-          // paddingTop: '10px',
-          // paddingRight: '10px',
-          // paddingBottom: '10px',
-          // paddingLeft: '10px',
-        },
-        area: {
-          top: "0%",
-          right: "0%",
-          left: "0%",
-          bottom: "0%"
-        },
-        singleChannel: false
-      },
-      decoder: {
-        readers: ["ean_reader", "ean_8_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader", "i2of5_reader"]
-      }
-    }, function (err) {
-      if (err) {
-        console.error('Error al iniciar QuaggaJS:', err);
-        alert('Error al iniciar QuaggaJS. Por favor, asegúrate de permitir el acceso a la cámara.');
-        return;
-      }
-      console.log('QuaggaJS iniciado correctamente.');
-      Quagga.start();
-    });
-
-    // Evento para capturar los códigos de barras escaneados
-    // Objeto para almacenar los códigos de barras escaneados y sus ocurrencias
-    var scannedCodes = {};
-
-    // Función para agregar un código a la lista y limpiar el registro
-    function addMostCommonCodeToList() {
-      // Encontrar el código de barras más común
-      var mostCommonCodes = Object.keys(scannedCodes).reduce(function (a, b) {
-        return scannedCodes[a] > scannedCodes[b] ? a : b;
-      });
-
-      console.log('Código de barras más común:', mostCommonCodes);
-
-      // Verificar si el código más común ya está en la lista
-      var select = document.getElementById("qrCodes");
-      var optionExists = Array.from(select.options).some(function (option) {
-        return option.value === mostCommonCodes;
-      });
-
-      // Si el código no está en la lista, agregarlo
-      if (!optionExists) {
-        // Crear un nuevo elemento de opción para el código más común
-        var option = document.createElement("option");
-        option.text = mostCommonCodes;
-
-        // Agregar el nuevo elemento de opción a la lista
-        select.add(option);
-
-        // Reproducir sonido
-        playBeep();
-      }
-
-      // Limpiar el registro de códigos escaneados
-      scannedCodes = {};
-    }
-
-    // Evento para capturar los códigos de barras escaneados
-    Quagga.onDetected(function (result) {
-      var code = result.codeResult.code; // Obtener el código de barras detectado
-      console.log('Código de barras detectado:', code);
-
-      if (code.length === 13) {
-        console.log('Código de barras detectado:', code);
-
-        // Incrementar el conteo para este código de barras
-        scannedCodes[code] = (scannedCodes[code] || 0) + 1;
-
-        // Detener temporalmente la detección de códigos de barras
-        Quagga.pause();
-
-        // Esperar 2 segundos antes de procesar los códigos
-        setTimeout(function () {
-          addMostCommonCodeToList();
-
-          // Reiniciar la detección de códigos de barras
-          Quagga.start();
-        }, 2000); // Esperar 2 segundos antes de procesar los códigos
-      }
-    });
-
-
-
-    // Evento para marcar un recuadro al detectar un código de barras
-    Quagga.onProcessed(function (result) {
-      var drawingCtx = Quagga.canvas.ctx.overlay,
-        drawingCanvas = Quagga.canvas.dom.overlay;
-
-      // Limpiar el área de dibujo
-      drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
-
-      // Verificar si hay resultados de códigos de barras y dibujar un recuadro si es así
-      if (result && result.boxes && result.boxes.length > 0) {
-        var area = result.boxes[0]; // Tomar el primer resultado de código de barras
-
-        drawingCtx.strokeStyle = "#00f"; // Color azul
-        drawingCtx.lineWidth = 2;
-        drawingCtx.strokeRect(area.left, area.top, area.width, area.height);
-
-        if (area) {
-          drawingCtx.strokeStyle = "#00f"; // Color azul
-          drawingCtx.lineWidth = 2;
-          drawingCtx.beginPath();
-          drawingCtx.moveTo(area[0][0], area[0][1]);
-          for (var i = 1; i < area.length; i++) {
-            drawingCtx.lineTo(area[i][0], area[i][1]);
-          }
-          drawingCtx.closePath();
-          drawingCtx.stroke();
-        }
-      }
-    });
-  }
-
 </script>
 
 <script>
@@ -440,6 +270,171 @@
         break;
     }
   }
+</script>
+
+<script>
+  var isQuaggaStarted = false;
+
+  function playBeep() {
+    if (window.AudioContext || window.webkitAudioContext) {
+      var context = new (window.AudioContext || window.webkitAudioContext)();
+      var oscillator = context.createOscillator();
+      oscillator.frequency.setValueAtTime(1000, context.currentTime);
+      oscillator.connect(context.destination);
+      oscillator.start();
+      setTimeout(function () {
+        oscillator.stop();
+      }, 500);
+    } else {
+      console.error('El navegador no soporta la reproducción de sonidos.');
+    }
+  }
+
+  function startCamera() {
+    if (isQuaggaStarted) {
+      Quagga.stop();
+      isQuaggaStarted = false;
+    }
+
+    function calcularAncho() {
+      var defaultWidthPercentage = 57.2;
+      return (window.innerWidth * defaultWidthPercentage) / 100;
+    }
+
+    Quagga.init({
+      inputStream: {
+        name: "Live",
+        type: "LiveStream",
+        target: document.querySelector("#camera"),
+        constraints: {
+          width: calcularAncho(),
+          height: 220,
+          marginTop: '5%',
+          marginRight: 0,
+          marginBottom: 0,
+          marginLeft: 0,
+          padding: '10px'
+        },
+        area: {
+          top: "0%",
+          right: "0%",
+          left: "0%",
+          bottom: "0%"
+        },
+        singleChannel: false,
+        zoom: {
+          max: 3,
+          min: 1,
+          defaultValue: 3,
+          pinchToZoom: true
+        }
+      },
+      decoder: {
+        readers: ["ean_reader", "ean_8_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader", "i2of5_reader"]
+      }
+    }, function (err) {
+      if (err) {
+        console.error('Error al iniciar QuaggaJS:', err);
+        alert('Error al iniciar QuaggaJS. Por favor, asegúrate de permitir el acceso a la cámara.');
+        return;
+      }
+      console.log('QuaggaJS iniciado correctamente.');
+      Quagga.start();
+      isQuaggaStarted = true;
+    });
+
+    var scannedCodes = {};
+
+    function addMostCommonCodeToList() {
+      var mostCommonCodes = Object.keys(scannedCodes).reduce(function (a, b) {
+        return scannedCodes[a] > scannedCodes[b] ? a : b;
+      });
+
+      console.log('Código de barras más común:', mostCommonCodes);
+
+      var select = document.getElementById("qrCodes");
+      var optionExists = Array.from(select.options).some(function (option) {
+        return option.value === mostCommonCodes;
+      });
+
+      if (!optionExists) {
+        var option = document.createElement("option");
+        option.text = mostCommonCodes;
+        select.add(option);
+        playBeep();
+      }
+
+      scannedCodes = {};
+    }
+
+    Quagga.onDetected(function (result) {
+      var code = result.codeResult.code;
+      console.log('Código de barras detectado:', code);
+
+      if (code.length === 13) {
+        console.log('Código de barras detectado:', code);
+
+        scannedCodes[code] = (scannedCodes[code] || 0) + 1;
+
+        Quagga.pause();
+
+        setTimeout(function () {
+          addMostCommonCodeToList();
+          Quagga.start();
+        }, 2000);
+      }
+    });
+
+    Quagga.onProcessed(function (result) {
+      var drawingCtx = Quagga.canvas.ctx.overlay,
+        drawingCanvas = Quagga.canvas.dom.overlay;
+
+      drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+
+      if (result && result.boxes && result.boxes.length > 0) {
+        var area = result.boxes[0];
+
+        drawingCtx.strokeStyle = "#00f";
+        drawingCtx.lineWidth = 2;
+        drawingCtx.strokeRect(area.left, area.top, area.width, area.height);
+
+        if (area) {
+          drawingCtx.strokeStyle = "#00f";
+          drawingCtx.lineWidth = 2;
+          drawingCtx.beginPath();
+          drawingCtx.moveTo(area[0][0], area[0][1]);
+          for (var i = 1; i < area.length; i++) {
+            drawingCtx.lineTo(area[i][0], area[i][1]);
+          }
+          drawingCtx.closePath();
+          drawingCtx.stroke();
+        }
+      }
+    });
+  }
+
+  var resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      if (isQuaggaStarted) {
+        Quagga.stop();
+        startCamera();
+      }
+    }, 200);
+  });
+
+  var myModal = document.getElementById('createmodal');
+  myModal.addEventListener('shown.bs.modal', function () {
+    startCamera();
+  });
+
+  myModal.addEventListener('hidden.bs.modal', function () {
+    if (isQuaggaStarted) {
+      Quagga.stop();
+      isQuaggaStarted = false;
+    }
+  });
 </script>
 
 

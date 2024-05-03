@@ -14,3 +14,7 @@ def editproduct():
 def addproduct():
     return render_template('products/add-product.html')
 
+@bp.route('/QR')
+def scanner():
+    return render_template('products/tester.html')
+

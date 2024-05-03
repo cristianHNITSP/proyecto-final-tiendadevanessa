@@ -1,56 +1,170 @@
-{% extends 'top navbar/top-navbar.html' %} {% block title %} add products {%
-endblock %} {%block content %}
+<script>
+  function startCamera() {
+    // Inicializar QuaggaJS con la configuración necesaria
 
-<div class="container-fluid mx-4">
-  <div class="d-flex justify-content-center align-items-center" style="height: calc(100vh - 56px);">
-    <!-- 56px es la altura aproximada del navbar, ajusta este valor según sea necesario -->
-    <div class="col-xl-12">
-      <div class="row">
+    function calcularAncho() {
+      var defaultWidthPercentage = 57.2; // Porcentaje deseado del ancho de la pantalla
+      return (window.innerWidth * defaultWidthPercentage) / 100;
+    }
 
-        <div class="col-xl-4 offset-xl-1">
-          <!-- Aquí se coloca la imagen -->
-          <!-- La clase w-100 estira la imagen al 100% del ancho de la columna -->
-              <div id="list-example" class="list-group">
-                <a class="list-group-item list-group-item-action" href="#list-item-1">Item 1</a>
-                <a class="list-group-item list-group-item-action" href="#list-item-2">Item 2</a>
-                <a class="list-group-item list-group-item-action" href="#list-item-3">Item 3</a>
-                <a class="list-group-item list-group-item-action" href="#list-item-4">Item 4</a>
-              </div>
-  
+    Quagga.init({
+      inputStream: {
+        name: "Live",
+        type: "LiveStream",
+        target: document.querySelector("#camera"),
+        constraints: {
+          width: calcularAncho(), // Ancho al 100% del contenedor
+          height: 220, // Alto automático para mantener la relación de aspecto
+          marginTop: '5%', // Margen superior del 5% del contenedor
+          marginRight: 0, // Sin margen a la derecha
+          marginBottom: 0, // Sin margen en la parte inferior
+          marginLeft: 0, // Sin margen a la izquierda
+          padding: '10px', // Padding de 10px en todos los lados
+          // O puedes usar propiedades específicas de padding:
+          // paddingTop: '10px',
+          // paddingRight: '10px',
+          // paddingBottom: '10px',
+          // paddingLeft: '10px',
+        },
+        area: {
+          top: "0%",
+          right: "0%",
+          left: "0%",
+          bottom: "0%"
+        },
+        singleChannel: true,
+        // Opciones de zoom para la cámara
+        zoom: {
+          max: 3, // Zoom máximo permitido
+          min: 1, // Zoom mínimo permitido
+          defaultValue: 3, // Valor de zoom por defecto
+          pinchToZoom: true // Permitir zoom mediante pellizco
+        }
+      },
+      decoder: {
+        readers: ["ean_reader", "ean_8_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader", "i2of5_reader"]
+      }
+    }, function (err) {
+      if (err) {
+        console.error('Error al iniciar QuaggaJS:', err);
+        alert('Error al iniciar QuaggaJS. Por favor, asegúrate de permitir el acceso a la cámara.');
+        //console.log('Error al iniciar QuaggaJS. Por favor, asegúrate de permitir el acceso a la cámara.');
+        return;
+      }
+      console.log('QuaggaJS iniciado correctamente.');
+      // Iniciar QuaggaJS con el zoom establecido
+      Quagga.start();
+    });
 
-          <div class="col-xl-10 offset-xl-1">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">First</th>
-                  <th scope="col">Last</th>
-                  <th scope="col">Handle</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td colspan="2">Larry the Bird</td>
-                  <td>@twitter</td>
-                </tr>
-              </tbody>
-            </table>
+    // Evento para capturar los códigos de barras escaneados
+    // Objeto para almacenar los códigos de barras escaneados y sus ocurrencias
+    var scannedCodes = {};
 
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endblock %}
+    // Función para agregar un código a la lista y limpiar el registro
+    function addMostCommonCodeToList() {
+      // Encontrar el código de barras más común
+      var mostCommonCodes = Object.keys(scannedCodes).reduce(function (a, b) {
+        return scannedCodes[a] > scannedCodes[b] ? a : b;
+      });
+
+      console.log('Código de barras más común:', mostCommonCodes);
+
+      // Verificar si el código más común ya está en la lista
+      var select = document.getElementById("qrCodes");
+      var optionExists = Array.from(select.options).some(function (option) {
+        return option.value === mostCommonCodes;
+      });
+
+      // Si el código no está en la lista, agregarlo
+      if (!optionExists) {
+        // Crear un nuevo elemento de opción para el código más común
+        var option = document.createElement("option");
+        option.text = mostCommonCodes;
+
+        // Agregar el nuevo elemento de opción a la lista
+        select.add(option);
+
+        // Reproducir sonido
+        playBeep();
+      }
+
+      // Limpiar el registro de códigos escaneados
+      scannedCodes = {};
+    }
+
+    // Evento para capturar los códigos de barras escaneados
+    Quagga.onDetected(function (result) {
+      var code = result.codeResult.code; // Obtener el código de barras detectado
+      console.log('Código de barras detectado:', code);
+
+      if (code.length === 13) {
+        console.log('Código de barras detectado:', code);
+
+        // Incrementar el conteo para este código de barras
+        scannedCodes[code] = (scannedCodes[code] || 0) + 1;
+
+        // Detener temporalmente la detección de códigos de barras
+        Quagga.pause();
+
+        // Esperar 2 segundos antes de procesar los códigos
+        setTimeout(function () {
+          addMostCommonCodeToList();
+
+          // Reiniciar la detección de códigos de barras
+          Quagga.start();
+        }, 2000); // Esperar 2 segundos antes de procesar los códigos
+      }
+    });
+
+
+    // Evento para marcar un recuadro al detectar un código de barras
+    Quagga.onProcessed(function (result) {
+      var drawingCtx = Quagga.canvas.ctx.overlay,
+        drawingCanvas = Quagga.canvas.dom.overlay;
+
+      // Limpiar el área de dibujo
+      drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+
+      // Verificar si hay resultados de códigos de barras y dibujar un recuadro si es así
+      if (result && result.boxes && result.boxes.length > 0) {
+        var area = result.boxes[0]; // Tomar el primer resultado de código de barras
+
+        drawingCtx.strokeStyle = "#00f"; // Color azul
+        drawingCtx.lineWidth = 2;
+        drawingCtx.strokeRect(area.left, area.top, area.width, area.height);
+
+        if (area) {
+          drawingCtx.strokeStyle = "#00f"; // Color azul
+          drawingCtx.lineWidth = 2;
+          drawingCtx.beginPath();
+          drawingCtx.moveTo(area[0][0], area[0][1]);
+          for (var i = 1; i < area.length; i++) {
+            drawingCtx.lineTo(area[i][0], area[i][1]);
+          }
+          drawingCtx.closePath();
+          drawingCtx.stroke();
+        }
+      }
+    });
+
+    // Variable para almacenar el temporizador
+    var resizeTimer;
+
+    // Agregar evento de escucha para el cambio de tamaño de la ventana
+    window.addEventListener('resize', function () {
+      // Limpiar el temporizador si existe
+      clearTimeout(resizeTimer);
+
+      // Establecer un nuevo temporizador para ejecutar la función después de un cierto período de tiempo (por ejemplo, 200 milisegundos)
+      resizeTimer = setTimeout(function () {
+        // Llamar a la función calcularAncho() después de que haya pasado el tiempo de espera
+        Quagga.stop();
+        Quagga.offProcessed(); // Eliminar el evento de procesamiento
+        Quagga.offDetected(); // Eliminar el evento de detección
+        console.log(calcularAncho());
+        // Reiniciar QuaggaJS con el nuevo ancho calculado
+        startCamera();
+      }, 200); // Tiempo de espera en milisegundos (ajustable según sea necesario)
+    });
+  }
+</script>

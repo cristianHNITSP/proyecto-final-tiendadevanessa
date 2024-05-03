@@ -1,6 +1,8 @@
 {% extends 'top navbar/top-navbar.html' %}
 {% block title %} sign in {% endblock %}
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/auth.css') }}">
+
 <div class="container-fluid mx-4">
   <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
     <!-- 56px es la altura aproximada del navbar, ajusta este valor según sea necesario -->
