@@ -3,7 +3,6 @@
 {% block content %}
 
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/products-shortcut-style.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
 <!-- animate__animated animate__fadeInUp -->
 <div class="container-fluid mx-4 ">
@@ -39,12 +38,12 @@
                                 <a class="btn btn-outline-light btn-lg square-btn mx-2" data-bs-toggle="tooltip"
                                     data-bs-placement="top" data-bs-custom-class="custom-tooltip"
                                     data-bs-title="This top tooltip is themed via CSS variables."
-                                    href="{{url_for('products.viewproduct')}}">
+                                    href="{{url_for('products.warehouse')}}">
                                     <div class="d-flex flex-column align-items-center">
                                         <span class="material-symbols-outlined">
                                             view_list
                                         </span>
-                                        <span class="d-none d-md-block">Products</span>
+                                        <span class="d-none d-md-block">warehouse</span>
                                     </div>
                                 </a>
 
@@ -61,8 +60,9 @@
                                 </a>
                                 <a class="btn btn-outline-light btn-lg square-btn mx-2" data-bs-toggle="tooltip"
                                     data-bs-placement="top" data-bs-custom-class="custom-tooltip"
-                                    data-bs-title="This top tooltip is themed via CSS variables." href="{{url_for('profile.profile')}}">
-                                    <div class="d-flex flex-column align-items-center">  
+                                    data-bs-title="This top tooltip is themed via CSS variables."
+                                    href="{{url_for('profile.profile')}}">
+                                    <div class="d-flex flex-column align-items-center">
                                         <span class="material-symbols-outlined">
                                             account_box
                                         </span>
@@ -71,11 +71,12 @@
                                 </a>
                                 <a class="btn btn-outline-light btn-lg square-btn mx-2" data-bs-toggle="tooltip"
                                     data-bs-placement="top" data-bs-custom-class="custom-tooltip"
-                                    data-bs-title="This top tooltip is themed via CSS variables." href="{{url_for('shortcut.settings')}}">
+                                    data-bs-title="This top tooltip is themed via CSS variables."
+                                    href="{{url_for('shortcut.settings')}}">
                                     <div class="d-flex flex-column align-items-center">
                                         <span class="material-symbols-outlined">
                                             settings_applications
-                                            </span>
+                                        </span>
                                         <span class="d-none d-md-block">Settings</span>
                                     </div>
                                 </a>
