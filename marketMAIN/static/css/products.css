@@ -64,14 +64,14 @@ body.dark-mode .list-group-buttons:active {
 
 
 .square-btn {
-  width: 3vw; /* Utilizamos 10% del ancho de la ventana */
-  height: 3vw; /* Utilizamos 10% del ancho de la ventana */
+  width: 4vw; /* Utilizamos 10% del ancho de la ventana */
+  height: 4vw; /* Utilizamos 10% del ancho de la ventana */
   /* Otros estilos */
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 10px; /* Suaviza los bordes */
-  
+  border: none;
   transition: background-color 0.3s; /* Agrega una transición suave */
 }
 
