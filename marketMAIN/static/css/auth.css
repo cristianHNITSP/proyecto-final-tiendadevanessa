@@ -1,4 +1,3 @@
-
 body.dark-mode .list-group-buttons {
     background-color: #333333;
     color: #F5F5F5;
@@ -14,4 +13,17 @@ body.dark-mode .list-group-buttons:active {
 
 ::-webkit-scrollbar {
     display: none;
+}
+
+
+:root {
+    --bd-violet-bg: #c04444;
+    /* Morado */
+    --bs-white: #fff;
+    /* Blanco */
+}
+
+.custom-tooltip {
+    --bs-tooltip-bg: var(--bd-violet-bg);
+    --bs-tooltip-color: var(--bs-white);
 }

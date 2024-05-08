@@ -1,0 +1,35 @@
+{% extends 'top navbar/top-navbar.html' %}
+{% block title %} Manage companys {% endblock %}
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/products.css') }}">
+
+<div class="container-fluid mt-5 "> <!-- Agregamos la clase mt-5 para añadir margen superior -->
+    <div class="row mx-2 mt-5 border border-Tertiary rounded p-0 ">
+
+        <h6 class="mt-1 d-none d-sm-flex">Manage companys</h6>
+
+        <div class="col-12 col-lg-3 border border-Tertiary rounded p-0">
+            <nav class="nav flex-column">
+                <div class="list-group d-flex flex-column">
+                    <a class="list-group-button-home list-group-item list-group-item-action"
+                        href="{{ url_for('shortcut.shortcut') }}">Home</a>
+                    <a class="list-group-buttons list-group-item list-group-item-action"
+                        href="{{ url_for('products.warehouse') }}">warehouse</a>
+                    <a class="list-group-buttons list-group-item list-group-item-action"
+                        href="{{ url_for('products.managewarehouse') }}">Manage warehouse</a>
+                    <a class="list-group-buttons list-group-item list-group-item-action"
+                        href="{{ url_for('products.managepresentation') }}">Manage presentation</a>
+                    <a class="list-group-buttons list-group-item list-group-item-action"
+                        href="{{ url_for('products.managesallers') }}">Manage sallers</a>
+                    <a class="list-group-item list-group-item-action active animate__animated animate__bounceIn "
+                        href="{{ url_for('products.managecompany') }}">Manage Companys</a>
+                </div>
+            </nav>
+        </div>
+
+
+    </div>
+</div>
+
+{% endblock %}

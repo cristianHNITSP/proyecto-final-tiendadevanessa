@@ -33,7 +33,12 @@
             href="{{ url_for('products.warehouse') }}">warehouse</a>
           <a class="list-group-item list-group-item-action active animate__animated animate__bounceIn"
             href="{{ url_for('products.managewarehouse') }}">Manage warehouse</a>
-
+          <a class="list-group-buttons list-group-item list-group-item-action"
+            href="{{ url_for('products.managepresentation') }}">Manage Presentation</a>
+          <a class="list-group-buttons list-group-item list-group-item-action "
+            href="{{ url_for('products.managesallers') }}">Manage sallers</a>
+          <a class="list-group-buttons list-group-item list-group-item-action "
+            href="{{ url_for('products.managecompany') }}">Manage Companys</a>
         </div>
       </nav>
     </div>
@@ -47,7 +52,7 @@
         </button>
       </form>
 
-      <table class="table table-bordered table-striped mt-3 mb-3">
+      <table class="table table-bordered  table-striped mt-3 mb-3">
         <!-- Mantenemos las clases existentes y agregamos espaciado -->
         <thead>
           <tr>
@@ -67,246 +72,219 @@
             <td>Otto</td>
             <td>@mdo</td>
             <td class="text-center d-flex justify-content-center align-items-center ">
-              <button type="button" class="btn btn-warning  mx-2"><span class="material-symbols-outlined">
+              <button type="button" class="btn btn-warning mx-2" data-bs-toggle="modal" data-bs-target="#editproduct">
+                <span class="material-symbols-outlined">
                   edit
-                </span></button>
-              <button type="button" class="btn btn-danger  mx-2"><span class="material-symbols-outlined">
+                </span>
+              </button>
+              <button type="button" class="btn btn-danger mx-2" data-bs-toggle="modal"
+                data-bs-target="#deleteproduct"><span class="material-symbols-outlined">
                   delete
                 </span></button>
             </td>
           </tr>
-
         </tbody>
       </table>
     </div>
-
-
-    <div class="modal fade" id="createmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createmodallabel"
-      aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Create new product</h5>
-            <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal"
-              aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form action="" method="post" class="needs-validation" novalidate>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="nombre" class="form-label">Nombre:</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" required>
-                    <div class="invalid-feedback">Por favor ingresa un nombre.</div>
-                  </div>
-                  <div class="mb-3">
-                    <label for="presentacion" class="form-label">Presentación:</label>
-                    <select class="form-select form-select-sm" id="presentacion" aria-label="Small select example"
-                      onchange="actualizarCantidadOptions()">
-                      <option value="lote" selected>Lote</option>
-                      <option value="botella">Botella</option>
-                      <option value="empaquetado">Empaquetado</option>
-                      <option value="granel">Granel</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="cantidadInput" class="form-label">Cantidad de productos:</label>
-                    <input type="number" class="form-control" id="cantidadInput" name="cantidad" required>
-                    <div class="invalid-feedback">Por favor ingresa una cantidad válida.</div>
-                  </div>
-                  <div class="mb-3">
-                    <label for="compania" class="form-label">Compañía:</label>
-                    <select class="form-select form-select-sm" id="compania" aria-label="Small select example">
-                      <option value="compania1" selected>Compañía 1</option>
-                      <option value="compania2">Compañía 2</option>
-                      <option value="compania3">Compañía 3</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="cantidadSelect" class="form-label">Cantidad:</label>
-                    <select class="form-select form-select-sm" id="cantidadSelect" name="cantidad" required>
-
-                      <!-- Las opciones se actualizarán dinámicamente aquí -->
-                    </select>
-                    <div class="invalid-feedback">Por favor seleccione una cantidad.</div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="mb-3">
-                    <label for="precio" class="form-label">Precio:</label>
-                    <div class="input-group">
-                      <span class="input-group-text">$</span>
-                      <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
-                      <div class="invalid-feedback">Por favor ingresa un precio válido.</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="d-none">
-                <div class="mb-3">
-
-                  <label for="cantidad" class="form-label">Codebars scan preview:</label>
-                </div>
-
-                <!-- Vista previa de la cámara -->
-                <div class="container-fluid bg-light rounded py-3">
-                  <div class="preview-camera col-12 " id="camera"></div>
-                </div>
-              </div>
-
-
-              <!-- Selector para los códigos de barras escaneados -->
-              <div class="mb-3">
-                <label for="qrCodes" class="form-label mt-3">Codebar scanned:</label>
-                <select class="form-select form-select-sm" id="qrCodes" aria-label="Small select example">
-                  <!-- Aquí se agregarán dinámicamente los códigos de barras escaneados -->
-                </select>
-              </div>
-
-              <div class="text-end">
-                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal"
-                  onclick="limpiarModal()">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Save products</button>
-              </div>
-            </form>
-          </div>
-
-
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 
+<div class="modal fade" id="createmodal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createmodallabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create new product</h5>
+        <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post" class="needs-validation" novalidate>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="nombre" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                <div class="invalid-feedback">Por favor ingresa un nombre.</div>
+              </div>
+              <div class="mb-3">
+                <label for="presentacion" class="form-label">Presentation:</label>
+                <select class="form-select form-select-sm" id="presentacion" aria-label="Small select example"
+                  onchange="actualizarCantidadOptions()">
+                  <option value="lote" selected>Lote</option>
+                  <option value="botella">Botella</option>
+                  <option value="empaquetado">Empaquetado</option>
+                  <option value="granel">Granel</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="cantidadInput" class="form-label">Quantity:</label>
+                <input type="number" class="form-control" id="cantidadInput" name="cantidad" required>
+                <div class="invalid-feedback">Por favor ingresa una cantidad válida.</div>
+              </div>
+              <div class="mb-3">
+                <label for="compania" class="form-label">Company:</label>
+                <select class="form-select form-select-sm" id="compania" aria-label="Small select example">
+                  <option value="compania1" selected>Compañía 1</option>
+                  <option value="compania2">Compañía 2</option>
+                  <option value="compania3">Compañía 3</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="cantidadSelect" class="form-label">Quantity:</label>
+                <select class="form-select form-select-sm" id="cantidadSelect" name="cantidad" required>
+                  <!-- Las opciones se actualizarán dinámicamente aquí -->
+                </select>
+                <div class="invalid-feedback">Por favor seleccione una cantidad.</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="precio" class="form-label">Price:</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
+                  <div class="invalid-feedback">Por favor ingresa un precio válido.</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-<script>
-  // Bloquear números negativos en el campo de precio
-  document.getElementById('precio').addEventListener('input', function () {
-    if (this.value < 0) {
-      this.value = '';
-    }
-  });
+          <div class="d-none">
+            <div class="mb-3">
 
-  // Bloquear números negativos en el campo de cantidad
-  document.getElementById('cantidadInput').addEventListener('input', function () {
-    if (this.value < 0) {
-      this.value = '';
-    }
-  });
-</script>
+              <label for="cantidad" class="form-label">Codebars scan preview:</label>
+            </div>
 
-<script>
-  function actualizarCantidadOptions() {
-    var presentacion = document.getElementById("presentacion").value;
-    console.log("Presentación seleccionada:", presentacion); // Agregar este console.log() para depurar
-    var cantidadSelect = document.getElementById("cantidadSelect");
-    cantidadSelect.innerHTML = ""; // Limpiar las opciones existentes
+            <!-- Vista previa de la cámara -->
+            <div class="container-fluid bg-light rounded py-3">
+              <div class="preview-camera col-12 " id="camera"></div>
+            </div>
+          </div>
+          <!-- Selector para los códigos de barras escaneados -->
+          <div class="mb-3">
+            <label for="qrCodes" class="form-label mt-3">Codebar scanned:</label>
+            <select class="form-select form-select-sm" id="qrCodes" aria-label="Small select example">
+              <!-- Aquí se agregarán dinámicamente los códigos de barras escaneados -->
+            </select>
+          </div>
 
-    switch (presentacion) {
-      case "botella":
-        // Opciones específicas para botella
-        addOption(cantidadSelect, "300 ml", "300ml");
-        addOption(cantidadSelect, "1 litro", "1l");
-        addOption(cantidadSelect, "500 ml", "500ml");
-        addOption(cantidadSelect, "175 ml", "175ml");
-        break;
-      case "empaquetado":
-        // Opciones específicas para empaquetado
-        addOption(cantidadSelect, "10 unidades", "10 unidades");
-        addOption(cantidadSelect, "20 unidades", "20 unidades");
-        addOption(cantidadSelect, "50 unidades", "50 unidades");
-        addOption(cantidadSelect, "100 unidades", "100 unidades");
-        break;
-      case "granel":
-        // Opciones específicas para granel
-        addOption(cantidadSelect, "1 kg", "1kg");
-        addOption(cantidadSelect, "500 g", "500g");
-        addOption(cantidadSelect, "250 g", "250g");
-        addOption(cantidadSelect, "100 g", "100g");
-        break;
-      default:
-        // Opciones por defecto
-        addOption(cantidadSelect, "1", "1");
-        addOption(cantidadSelect, "2", "2");
-        addOption(cantidadSelect, "3", "3");
-        break;
-    }
-    cantidadSelect.selectedIndex = 0;
-  }
+          <div class="text-end">
+            <button type="button" class="btn btn-warning me-2" data-bs-dismiss="modal"
+              onclick="limpiarModal()">Close</button>
+            <button type="submit" class="btn btn-success">Save products</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
-  // Función auxiliar para agregar opciones a un elemento select
-  function addOption(selectElement, text, value) {
-    var option = document.createElement("option");
-    option.text = text;
-    option.value = value;
-    selectElement.appendChild(option);
-  }
-</script>
+<div class="modal fade" id="editproduct" data-bs-backdrop="static" tabindex="-1" aria-labelledby="editproductlabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editproductlabel">Edit Product</h5>
+        <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post" class="needs-validation" novalidate>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="newnombre" class="form-label">New name:</label>
+                <input type="text" class="form-control" id="newnombre" name="newnombre" required>
+                <div class="invalid-feedback">Please enter a name.</div>
+              </div>
+              <div class="mb-3">
+                <label for="newpresentacion" class="form-label">Presentation:</label>
+                <select class="form-select form-select-sm" id="newpresentacion" aria-label="Small select example"
+                  onchange="updateNewQuantityOptions()">
+                  <option value="lote" selected>Lote</option>
+                  <option value="botella">Botella</option>
+                  <option value="empaquetado">Empaquetado</option>
+                  <option value="granel">Granel</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="newcantidadInput" class="form-label">New quantity:</label>
+                <input type="number" class="form-control" id="newcantidadInput" name="newcantidadInput" required>
+                <div class="invalid-feedback">Please enter a valid quantity.</div>
+              </div>
+              <div class="mb-3">
+                <label for="newcompania" class="form-label">Company:</label>
+                <select class="form-select form-select-sm" id="newcompania" aria-label="Small select example">
+                  <option value="company1" selected>Company 1</option>
+                  <option value="company2">Company 2</option>
+                  <option value="company3">Company 3</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="newcantidadSelect" class="form-label">Quantity:</label>
+                <select class="form-select form-select-sm" id="newcantidadSelect" name="newcantidadSelect" required>
+                  <!-- Options will be dynamically updated here -->
+                </select>
+                <div class="invalid-feedback">Please select a quantity.</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="newprecio" class="form-label">Price:</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control" id="newprecio" name="newprecio" step="0.01" required>
+                  <div class="invalid-feedback">Please enter a valid price.</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-<script>
-  function limpiarModal() {
-    // Limpiar el campo de nombre
-    document.getElementById("nombre").value = "";
+          <div class="text-end">
+            <button type="button" class="btn btn-warning me-2" data-bs-dismiss="modal"
+              onclick="limpiarEditModal()">Close</button>
+            <button type="submit" class="btn btn-success">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
-    // Limpiar el campo de presentación
-    document.getElementById("presentacion").selectedIndex = 0;
+<div class="modal fade" id="deleteproduct" data-bs-backdrop="static" tabindex="-1" aria-labelledby="deleteproductlabel">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete product</h5>
+        <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-warning" role="alert">
+          Are you sure to delete this product?
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger">Delete product</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-    // Limpiar el campo de cantidad
-    document.getElementById("cantidadInput").value = "";
+<script src="{{ url_for('static', filename='js/modalCreate.js') }}"></script>
 
-    // Limpiar el campo de compañía
-    document.getElementById("compania").selectedIndex = 0;
-
-    // Limpiar el campo de cantidad (rango)
-    document.getElementById("cantidadRange").value = 0;
-    actualizarCantidad();
-
-    // Limpiar el campo de precio
-    document.getElementById("precio").value = "";
-
-    // Limpiar los códigos de barras escaneados
-    var select = document.getElementById("qrCodes");
-    select.innerHTML = "";
-
-    // Detener la captura de QuaggaJS (si está activa)
-    Quagga.stop();
-  }
-
-  // Función para actualizar la cantidad mostrada según el rango seleccionado
-  function actualizarCantidad() {
-    var presentacion = document.getElementById("presentacion").value;
-    var cantidadInput = document.getElementById("cantidadInput");
-
-    switch (presentacion) {
-      case "lote":
-        cantidadInput.setAttribute('type', 'number');
-        break;
-      case "botella":
-        cantidadInput.setAttribute('type', 'text');
-        cantidadInput.value = "Ejemplo: 500 ml";
-        break;
-      case "empaquetado":
-        cantidadInput.setAttribute('type', 'text');
-        cantidadInput.value = "Ejemplo: 20 unidades";
-        break;
-      case "granel":
-        cantidadInput.setAttribute('type', 'text');
-        cantidadInput.value = "Ejemplo: 1 kg";
-        break;
-      default:
-        cantidadInput.setAttribute('type', 'number');
-        break;
-    }
-  }
-</script>
+<script src="{{ url_for('static', filename='js/modalEdit.js') }}"></script>
 
 <script src="{{ url_for('static', filename='js/qrScan.js') }}"></script>
 

@@ -70,12 +70,7 @@ body.dark-mode .btn {
   color: #000000;
 }
 
-/* Estilos para el modo claro */
-body:not(.dark-mode) .btn:active {
-  background-color: #007AFF; /* Color de fondo cuando se presiona el botón en modo claro */
-  border-color: #bdbdbd; /* Color del borde cuando se presiona el botón en modo claro */
-  color: #F5F5F5;
-}
+
 
 .focus-outline-none:focus {
   outline: none !important;

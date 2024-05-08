@@ -7,6 +7,19 @@ def warehouse():
     return render_template('products/warehouse.html')
 
 
-@bp.route('/Manage_warehouse')
+@bp.route('/manage_warehouse')
 def managewarehouse():
-    return render_template('products/Manage-warehouse.html')
+    return render_template('products/manage-warehouse.html')
+
+@bp.route('/manage_presentation')
+def managepresentation():
+    return render_template('products/manage-presentation.html')
+
+@bp.route('/manage_sallers')
+def managesallers():
+    return render_template('products/manage-sallers.html')
+
+@bp.route('/manage_company')
+def managecompany():
+    return render_template('products/manage-company.html')
+
