@@ -6,7 +6,6 @@ bp = Blueprint('products', __name__, url_prefix='/products')
 def warehouse():
     return render_template('products/warehouse.html')
 
-
 @bp.route('/manage_warehouse')
 def managewarehouse():
     return render_template('products/manage-warehouse.html')
