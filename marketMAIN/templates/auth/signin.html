@@ -73,5 +73,36 @@
   </div>
 </div>
 
+{% if successful %}
+<div class="modal fade show" id="successfulRegistrationModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Successful Account</h5>
+        <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-success" role="alert">
+          <p> Your registration was successful.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if successful %}
+
+<script>
+  // Show the successful registration modal if the 'successful' variable is true
+  $(document).ready(function () {
+    console.log('test 1')
+    $('#successfulRegistrationModal').modal('show');
+  });
+</script>
+{% endif %}
 
 {% endblock %}

@@ -7,7 +7,7 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 def signup():
     if request.method == 'POST':
         return redirect(url_for('auth.signin'))
-    return render_template('auth/signup.html')
+    return render_template('auth/signup.html', )
 
 @bp.route('/signin', methods=['GET', 'POST'])
 def signin():
