@@ -17,16 +17,10 @@
             href="{{ url_for('products.warehouse') }}">Warehouse</a>
           <a class="list-group-buttons list-group-item list-group-item-action"
             href="{{ url_for('products.managewarehouse') }}">Manage warehouse</a>
-
           <a class="list-group-buttons list-group-item list-group-item-action "
             href="{{ url_for('products.managepresentation') }}">Manage Presentation</a>
-
-          <a class="list-group-buttons list-group-item list-group-item-action "
-            href="#">Manage sallers</a>
-
-          <a class="list-group-buttons list-group-item list-group-item-action "
-            href="#">Manage Companys</a>
-
+            <a class="list-group-buttons list-group-item list-group-item-action "
+            href="{{ url_for('products.managecompany') }}">Manage Companys</a>
         </div>
       </nav>
     </div>

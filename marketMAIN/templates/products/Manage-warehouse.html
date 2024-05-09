@@ -36,8 +36,6 @@
           <a class="list-group-buttons list-group-item list-group-item-action"
             href="{{ url_for('products.managepresentation') }}">Manage Presentation</a>
           <a class="list-group-buttons list-group-item list-group-item-action "
-            href="{{ url_for('products.managesallers') }}">Manage sallers</a>
-          <a class="list-group-buttons list-group-item list-group-item-action "
             href="{{ url_for('products.managecompany') }}">Manage Companys</a>
         </div>
       </nav>
@@ -94,7 +92,7 @@
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Create new product</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Create Nnew Product</h5>
         <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -158,7 +156,7 @@
           <div class="d-none">
             <div class="mb-3">
 
-              <label for="cantidad" class="form-label">Codebars scan preview:</label>
+              <label for="cantidad" class="form-label">Codebars Scan Preview:</label>
             </div>
 
             <!-- Vista previa de la cámara -->
@@ -168,7 +166,7 @@
           </div>
           <!-- Selector para los códigos de barras escaneados -->
           <div class="mb-3">
-            <label for="qrCodes" class="form-label mt-3">Codebar scanned:</label>
+            <label for="qrCodes" class="form-label mt-3">Codebar Scanned:</label>
             <select class="form-select form-select-sm" id="qrCodes" aria-label="Small select example">
               <!-- Aquí se agregarán dinámicamente los códigos de barras escaneados -->
             </select>
@@ -177,7 +175,7 @@
           <div class="text-end">
             <button type="button" class="btn btn-warning me-2" data-bs-dismiss="modal"
               onclick="limpiarModal()">Close</button>
-            <button type="submit" class="btn btn-success">Save products</button>
+            <button type="submit" class="btn btn-success">Save Products</button>
           </div>
         </form>
       </div>
@@ -198,7 +196,7 @@
           <div class="row">
             <div class="col-md-6">
               <div class="mb-3">
-                <label for="newnombre" class="form-label">New name:</label>
+                <label for="newnombre" class="form-label">New Name:</label>
                 <input type="text" class="form-control" id="newnombre" name="newnombre" required>
                 <div class="invalid-feedback">Please enter a name.</div>
               </div>
@@ -215,7 +213,7 @@
             </div>
             <div class="col-md-6">
               <div class="mb-3">
-                <label for="newcantidadInput" class="form-label">New quantity:</label>
+                <label for="newcantidadInput" class="form-label">New Quantity:</label>
                 <input type="number" class="form-control" id="newcantidadInput" name="newcantidadInput" required>
                 <div class="invalid-feedback">Please enter a valid quantity.</div>
               </div>
@@ -254,7 +252,7 @@
           <div class="text-end">
             <button type="button" class="btn btn-warning me-2" data-bs-dismiss="modal"
               onclick="limpiarEditModal()">Close</button>
-            <button type="submit" class="btn btn-success">Save changes</button>
+            <button type="submit" class="btn btn-success">Save Changes</button>
           </div>
         </form>
       </div>
@@ -266,7 +264,7 @@
   <div class="modal-dialog ">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Delete product</h5>
+        <h5 class="modal-title">Delete Product</h5>
         <button type="button" class="btn-close custom-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -276,7 +274,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger">Delete product</button>
+        <button type="button" class="btn btn-danger">Delete Product</button>
       </div>
     </div>
   </div>

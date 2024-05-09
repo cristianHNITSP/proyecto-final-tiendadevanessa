@@ -14,10 +14,6 @@ def managewarehouse():
 def managepresentation():
     return render_template('products/manage-presentation.html')
 
-@bp.route('/manage_sallers')
-def managesallers():
-    return render_template('products/manage-sallers.html')
-
 @bp.route('/manage_company')
 def managecompany():
     return render_template('products/manage-company.html')
